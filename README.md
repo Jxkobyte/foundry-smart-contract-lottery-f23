@@ -9,3 +9,11 @@
 
 3. Using chainlink VRF for provable random number
 4. Using chainlink Automation for a time based trigger
+
+
+## Tests
+1. Deploy scripts
+2. Write tests for
+    1. Local Chain
+    2. Forked Testnet
+    3. Forked Mainnet
