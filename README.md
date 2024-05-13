@@ -17,3 +17,5 @@
     1. Local Chain
     2. Forked Testnet
     3. Forked Mainnet
+
+forge test --deny-warnings

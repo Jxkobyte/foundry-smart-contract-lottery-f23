@@ -14,7 +14,7 @@ contract RaffleTest is  StdCheats, Test {
     Raffle raffle;
     HelperConfig hc;
 
-    uint256 ticketFee;
+    uint256 ticketFee = 0.01 ether;
     uint256 drawInterval;
     address vrfCoordinator;
     bytes32 gasLane;
@@ -34,10 +34,32 @@ contract RaffleTest is  StdCheats, Test {
         gasLane,
         subscriptionId,
         callbackGasLimit) = hc.activeNetworkConfig();
+        vm.deal(PLAYER, STARTING_USER_BALANCE);
     }
 
     function testRaffleInitializesInOpenState() public view {
         assert(raffle.getRaffleState() == Raffle.RaffleState.OPEN);
     }
 
+    // enter raffle //
+    function testRaffleRevertsWhenYouDontPayEnough() public {
+        // arrange
+        vm.prank(PLAYER); // Sets msg.sender to the specified address for the next call
+        // act + assert
+        vm.expectRevert(Raffle.Raffle__NotEnoughEthSent.selector); // If the next call does not revert with the expected data message, then expectRevert will
+        raffle.enterRaffle();
+    }
+
+    function testPlayerIsAddedToPlayerArray() public {
+        // arrange
+        vm.prank(PLAYER); // same as prank but gives balance
+        
+        // act 
+        raffle.enterRaffle{value: ticketFee}();
+
+        // assert
+        address playerRecorded = raffle.getPlayerFromPlayerArray(0);
+        assert(playerRecorded == PLAYER);
+
+    }
 }
